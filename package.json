@@ -1,0 +1,17 @@
+{
+  "name": "techdegree-fullstackjs-course-review-rest-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "nodemon ./src/index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.3",
+    "mongoose": "^5.3.6",
+    "mongoose-type-email": "^1.0.9",
+    "morgan": "^1.9.0"
+  }
+}
