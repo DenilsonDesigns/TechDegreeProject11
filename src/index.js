@@ -4,35 +4,30 @@
 const express = require("express");
 const morgan = require("morgan");
 const mongoose = require("mongoose");
+const bodyParser = require("body-parser");
+const routes = require("./routes/routes");
 
 const app = express();
 
 const User = require("./models/User");
 
+//DB connection
 mongoose
   .connect(
     "mongodb://localhost/course-api",
     { useNewUrlParser: true }
   )
   .then(() => {
-    console.log("Mongo Connected");
+    console.log("Mongo Connected to port 5000");
   })
   .catch(() => {
     console.log("Error Connecting to Mongo");
   });
 
-const user = new User({
-  fullName: "Daniel Blah",
-  emailAddress: "test@test.com",
-  password: "password"
-});
-
-user.save();
-
-// morgan gives us http request logging
+//Middleware
+app.use(bodyParser.json());
 app.use(morgan("dev"));
-
-// TODO add additional routes here
+routes(app);
 
 // send a friendly greeting for the root route
 app.get("/", (req, res) => {
