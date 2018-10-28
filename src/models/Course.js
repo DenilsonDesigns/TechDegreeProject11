@@ -19,10 +19,26 @@ const CourseSchema = new Schema({
   },
   materialsNeeded: {
     type: String
+  },
+  steps: [
+    {
+      stepNumber: {
+        type: Number
+      },
+      title: {
+        type: String,
+        required: true
+      },
+      description: {
+        type: String,
+        required: true
+      }
+    }
+  ],
+  reviews: {
+    type: mongoose.Schema.ObjectId,
+    ref: "review"
   }
-
-  // steps (Array of objects that include stepNumber (Number), title (String, required) and description (String, required) properties)
-  // reviews (Array of ObjectId values, _id values from the reviews collection)
 });
 
 const Course = mongoose.model("course", CourseSchema);

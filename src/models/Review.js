@@ -11,7 +11,10 @@ const ReviewSchema = new Schema({
     default: Date.now
   },
   rating: {
-    // rating (Number, required, must fall between “1” and “5”)
+    type: Number,
+    required: true,
+    min: 1,
+    max: 5
   },
   review: {
     type: String

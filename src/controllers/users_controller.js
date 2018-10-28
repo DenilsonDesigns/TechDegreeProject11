@@ -1,10 +1,31 @@
 const User = require("../models/User");
 
 module.exports = {
+  //test
   greeting(req, res) {
     res.send({ hi: "there" });
+  },
+  //post and create new user instance
+  postNewUser(req, res, next) {
+    //check if email, fullaname, and password supplied
+    if (req.body.emailAddress && req.body.fullName && req.body.password) {
+      //create user object
+      let user = {
+        emailAddress: req.body.emailAddress,
+        fullName: req.body.fullName,
+        password: req.body.password
+      };
+      //create user in db
+      User.create(user, (err, user) => {
+        if (err) {
+          return next(err);
+        } else {
+          return res.status(201).redirect("/");
+        }
+      });
+    }
   }
-};
+}; ////////////END EXPORTS
 
 // const Driver = require("../models/driver");
 
