@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
 
 require("mongoose-type-email");
 
@@ -22,7 +22,7 @@ const UserSchema = new Schema({
 
 // authenticate input against database documents
 UserSchema.statics.authenticate = function(email, password, callback) {
-  User.findOne({ email: email }).exec(function(error, user) {
+  User.findOne({ emailAddress: email }).exec(function(error, user) {
     if (error) {
       return callback(error);
     } else if (!user) {
@@ -51,6 +51,5 @@ UserSchema.pre("save", function(next) {
     next();
   });
 });
-
 const User = mongoose.model("user", UserSchema);
 module.exports = User;
