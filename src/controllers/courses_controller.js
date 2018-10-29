@@ -10,17 +10,36 @@ module.exports = {
   getCourseById(req, res, next) {
     let id = req.params.courseId;
     Course.findById({ _id: id }).then(course => {
-      res.send(course);
+      if (err) {
+        return next(err);
+      } else {
+        return res.send(course);
+      }
     });
   },
 
   createCourse(req, res, next) {
-    console.log("Course Create Route");
+    let course = {
+      title: req.body.title,
+      description: req.body.description
+    };
+
+    Course.create(course, (err, newCourse) => {
+      if (err) {
+        return next(err);
+      } else {
+        return res.status(201).redirect("/");
+      }
+    });
   },
 
   updateCourse(req, res, next) {
-    let courseToBeUpdated = req.params.courseId;
-    console.log(courseToBeUpdated);
+    let courseId = req.params.courseId;
+    let courseProps = req.body;
+
+    Course.findByIdAndUpdate({ _id: courseId }, courseProps).then(() => {
+      return res.status(204).redirect("/");
+    });
   },
 
   postReview(req, res, next) {
