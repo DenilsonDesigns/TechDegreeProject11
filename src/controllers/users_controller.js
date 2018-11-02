@@ -21,7 +21,14 @@ module.exports = {
         if (err) {
           return next(err);
         } else {
-          return res.status(201).redirect("/");
+          //my old code
+          // return res.status(201).redirect("/");
+
+          //Aj's code- yet to try
+          return res
+            .status(201)
+            .location("/")
+            .end();
         }
       });
     }
@@ -39,6 +46,25 @@ module.exports = {
           return next(err);
         } else {
           res.send(user);
+          return next();
+        }
+      });
+    }
+  },
+
+  //testing this- not verified working
+  checkIfUser(req, res, next) {
+    let credentials = auth(req);
+
+    if (!credentials) {
+      err.statusCode = 401;
+      return next(err);
+    } else {
+      User.authenticate(credentials.name, credentials.pass, (err, user) => {
+        if (err) {
+          return next(err);
+        } else {
+          // res.send(user);
           return next();
         }
       });
