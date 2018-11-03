@@ -52,12 +52,12 @@ module.exports = {
     }
   },
 
-  //testing this- not verified working
   checkIfUser(req, res, next) {
     let credentials = auth(req);
 
     if (!credentials) {
       err.statusCode = 401;
+      //throw new error('user not found')
       return next(err);
     } else {
       User.authenticate(credentials.name, credentials.pass, (err, user) => {

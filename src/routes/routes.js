@@ -21,14 +21,24 @@ module.exports = app => {
   //******************* */
 
   // POST /api/courses 201 - Creates a course, sets the Location header, and returns no content
-  app.post("/api/courses", CoursesController.createCourse);
-  //@TODO - CORRECTLY POSTS NEW COURSE, BUT NEED TO ADD AUTH- Add newly created checkIfUser????
-  //************************************************* */
+  app.post(
+    "/api/courses",
+    UsersController.checkIfUser,
+    CoursesController.createCourse
+  );
 
   // PUT /api/courses/:courseId 204 - Updates a course and returns no content
-  app.put("/api/courses/:courseId", CoursesController.updateCourse);
-  //@TODO - works but no error handling or AUTH- Add newly created checkIfUser????
+  app.put(
+    "/api/courses/:courseId",
+    UsersController.checkIfUser,
+    CoursesController.updateCourse
+  );
+  //@TODO- needs error handling?
 
   // POST /api/courses/:courseId/reviews 201 - Creates a review for the specified course ID, sets the Location header to the related course, and returns no content- NOT ATTEMPTED YET
-  app.post("/api/courses/:courseId/reviews", CoursesController.postReview);
+  app.post(
+    "/api/courses/:courseId/reviews",
+    UsersController.checkIfUser,
+    CoursesController.postReview
+  );
 };
