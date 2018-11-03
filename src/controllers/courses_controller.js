@@ -1,6 +1,7 @@
 const Course = require("../models/Course");
 const User = require("../models/User");
 const Review = require("../models/Review");
+const auth = require("basic-auth");
 
 module.exports = {
   getCourses(req, res, next) {
@@ -9,21 +10,17 @@ module.exports = {
     });
   },
 
-  //DO NOT UNDERSTAND THE POPULATE FOR THIS ROUTE
   getCourseById(req, res, next) {
     let id = req.params.courseId;
     Course.findOne({ _id: id })
-
-      // .populate("user")
-      // populate({ path: 'fans', select: 'name' }).
+      .populate("user")
+      .populate("reviews")
       .then(async course => {
-        let user = await User.findById({ _id: course.user });
-
         if (!course) {
           let err = new Error("Course not found");
           return next(err);
         } else {
-          return res.send({ course: course, user: user.fullName });
+          return res.send({ course: course });
         }
       });
   },
@@ -53,8 +50,30 @@ module.exports = {
   },
 
   //@TODO:
-  postReview(req, res, next) {
-    let courseToBeReviewed = req.params.courseId;
-    console.log(courseToBeReviewed);
+  async postReview(req, res, next) {
+    let credentials = auth(req);
+    let userId;
+    //get userId
+    await User.find({ emailAddress: credentials.name }).then(user => {
+      userId = user[0]._id;
+    });
+
+    //create review in review schema
+    const review = new Review({
+      user: userId,
+      rating: req.body.rating
+    });
+    //save review- is this step needed?
+    await review.save();
+    //find course from :courseId and push review
+    await Course.findOneAndUpdate(
+      { _id: req.params.courseId },
+      { $push: { reviews: review } }
+    ).catch(err => {
+      return next(err);
+    });
+
+    //send user back to course page with 201 status
+    return res.status(201).redirect("/api/courses/" + req.params.courseId);
   }
 };

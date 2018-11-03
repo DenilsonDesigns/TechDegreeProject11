@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const CourseSchema = new Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User"
+    ref: "user"
   },
   title: {
     type: String,
@@ -38,7 +38,7 @@ const CourseSchema = new Schema({
   reviews: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Review"
+      ref: "review"
     }
   ]
 });
