@@ -14,7 +14,7 @@ const User = require("./models/User");
 //DB connection
 mongoose
   .connect(
-    "mongodb://localhost/course-api",
+    "mongodb://localhost:27017/course-api",
     { useNewUrlParser: true }
   )
   .then(() => {

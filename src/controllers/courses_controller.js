@@ -5,7 +5,7 @@ const auth = require("basic-auth");
 
 module.exports = {
   getCourses(req, res, next) {
-    Course.find({}).then(courses => {
+    Course.find({}, "_id title").then(courses => {
       res.send(courses);
     });
   },
@@ -33,9 +33,10 @@ module.exports = {
 
     Course.create(course, (err, newCourse) => {
       if (err) {
+        err.message = "unable to create new course";
         return next(err);
       } else {
-        return res.status(201).redirect("/");
+        return res.status(201).end();
       }
     });
   },
@@ -45,7 +46,7 @@ module.exports = {
     let courseProps = req.body;
 
     Course.findByIdAndUpdate({ _id: courseId }, courseProps).then(() => {
-      return res.status(204).redirect("/");
+      return res.status(204).end();
     });
   },
 
