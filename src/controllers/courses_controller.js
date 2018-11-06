@@ -31,12 +31,20 @@ module.exports = {
       description: req.body.description
     };
 
+    // Driver.create(driverProps)
+    // .then(driver => res.send(driver))
+    // .catch(next);
+
     Course.create(course, (err, newCourse) => {
       if (err) {
+        err.status = 401;
         err.message = "unable to create new course";
         return next(err);
       } else {
-        return res.status(201).end();
+        return res
+          .status(201)
+          .location("/")
+          .end();
       }
     });
   },

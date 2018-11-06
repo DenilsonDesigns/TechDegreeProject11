@@ -6,8 +6,15 @@ module.exports = {
   greeting(req, res) {
     res.send({ hi: "there" });
   },
+
   //post and create new user instance
   postNewUser(req, res, next) {
+    if (!req.body.emailAddress || !req.body.fullName || !req.body.password) {
+      let err = {};
+      err.message = "Email address, full name, and password required";
+      err.status = 401;
+      return next(err);
+    }
     //check if email, fullaname, and password supplied
     if (req.body.emailAddress && req.body.fullName && req.body.password) {
       //create user object
@@ -21,10 +28,6 @@ module.exports = {
         if (err) {
           return next(err);
         } else {
-          //my old code
-          // return res.status(201).redirect("/");
-
-          //Aj's code- yet to try
           return res
             .status(201)
             .location("/")
@@ -38,7 +41,9 @@ module.exports = {
     let credentials = auth(req);
 
     if (!credentials) {
-      err.statusCode = 401;
+      let err = {};
+      err.message = "Username and password required";
+      err.status = 401;
       return next(err);
     } else {
       User.authenticate(credentials.name, credentials.pass, (err, user) => {
@@ -56,9 +61,9 @@ module.exports = {
     let credentials = auth(req);
 
     if (!credentials) {
-      err.statusCode = 401;
+      // err.statusCode = 401;
       //throw new error('user not found')
-      return next(err);
+      return next();
     } else {
       User.authenticate(credentials.name, credentials.pass, (err, user) => {
         if (err) {
